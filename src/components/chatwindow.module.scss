@@ -1,1 +1,28 @@
 @use "../variables" as *;
+
+.chatApp {
+    width: 90%;
+    height: 90%;
+    padding: 3rem 2rem;
+    background-color: rgba(187, 206, 223, 0.5);;
+    border-radius: 2rem;
+    color: $primary-color;
+    text-align: center;
+    box-shadow: 0 0 1rem $link-color;
+}
+
+.title {
+    @include title(5rem);
+    margin-bottom: 3rem;
+}
+
+.apiLink {
+    margin-bottom: 3rem;
+    display: inline-block;
+    font-size: 2rem;
+    color: $link-color;
+    transition: all 0.5s ease;
+    &:hover {
+        text-decoration: underline;
+    }
+}

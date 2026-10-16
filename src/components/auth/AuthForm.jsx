@@ -1,22 +1,32 @@
 import InputField from "../InputField/InputField";
 import style from "./authform.module.scss";
 
-const AuthForm = ({}) => {
-    return (
-      <form action="" className={StyleSheet.authForm}>
+const AuthForm = ({
+  apiInstance,
+  onChangeApiInstance,
+  apiToken,
+  onChangeApiToken,
+}) => {
+  return (
+    <section className={style.authBlock}>
+      <h3 className={style.subtitle}>Авторизация</h3>
+      <form action="#" className={style.authForm}>
         <InputField
-          label="Instance ID"
+          label="API Instance"
           value={apiInstance}
-          onChange={setApiInstance}
+          onChange={onChangeApiInstance}
         />
         <InputField
-          label="Secret Key"
+          label="API Token"
           type="password"
+          autoComplete="off"
           value={apiToken}
-          onChange={setApiToken}
+          onChange={onChangeApiToken}
         />
+        <button type="submit" className={style.authButton}>Авторизоваться</button>
       </form>
-    );
-}
- 
+    </section>
+  );
+};
+
 export default AuthForm;

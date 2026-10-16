@@ -14,7 +14,7 @@ const ChatWindow = () => {
       <div className={style.chatApp}>
         <header className={style.header}>
           <h2 className={style.title}>Чат с telegram</h2>
-          <a href="https://green-api.com/max" target="_blank" rel="noreferrer">
+          <a href="https://green-api.com/max" target="_blank" rel="noreferrer" className={style.apiLink}>
             Документация API
           </a>
         </header>

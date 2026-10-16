@@ -2,7 +2,7 @@ import style from "./inputfield.module.scss";
 
 const InputField = ({label, type = 'text', value, onChange}) => {
     return (
-      <label>
+      <label className={style.inputBlock}>
         {label && <span className={style.label}>{label}</span>}
         <input
           id={`${type}-${label?.toLowerCase()}`}

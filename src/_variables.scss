@@ -1,0 +1,30 @@
+//переменные
+$primary-background: #bbcedf;
+$primary-color: #262626;
+$title-color: #1b7ace;
+$link-color: #0e4e86;
+
+
+//миксины
+@mixin title($fontSize: 3.2rem, $color: $title-color) {
+    font-size: $fontSize;
+    line-height: 1.3;
+    font-weight: 700;
+    text-align: center;
+    color: $color;
+}
+
+@mixin button ($width) {
+    margin: 0 auto;
+    width: $width;
+    height: 5rem;
+    font-size: 2rem;
+    border-radius: 0.5rem;
+    background-color: $link-color;
+    color: $primary-background;
+    transition: all 0.5s ease;
+
+    &:hover {
+        background-color: #1b7ace;
+    }
+}

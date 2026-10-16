@@ -1,0 +1,16 @@
+@use "../../variables" as *;
+
+.inputBlock {
+   font-size: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
+
+.input {
+  width: 50%;
+  padding: 1rem;
+  font-size: 2rem;
+  border-radius: 0.5rem;
+}
