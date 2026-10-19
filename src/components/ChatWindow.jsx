@@ -2,79 +2,80 @@ import { useState } from "react";
 import AuthForm from "./auth/AuthForm";
 import MessageList from "./chat/MessageList";
 import SendMessageForm from "./chat/SendMessageForm";
-import style from "./chatwindow.module.scss";
-import { checkApiCredentials } from "../utils/api";
 import OpenChat from "./chat/OpenChat";
+import style from "./chatwindow.module.scss";
+import { sendWhatsappMessage } from "../utils/api";
 
 const ChatWindow = () => {
-  const [userCredentials, setUserCredentials] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState(null);
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState(null);
+  const [isSending, setIsSending] = useState(false);
+  const [credentials, setCredentials] = useState(null);
 
-  //Обработчик формы авторизации
-  const handleAuthSubmit = async (newInstance, newToken) => {
-    try {
-      await checkApiCredentials(newInstance, newToken);
-      localStorage.setItem(
-        "userCredentials",
-        JSON.stringify({ instanceId: newInstance, token: newToken }),
-      );
-      // Сохраняем ключи в локальное состояние компонента
-      setUserCredentials({
-        instanceId: newInstance,
-        token: newToken,
-      });
-    } catch (error) {
-      alert(error.message || "Неверные API-ключи");
-    }
+  // 3. Обработчик успеха
+  const handleAuthSuccess = (creds) => {
+    // Сохраняем данные для отправки сообщений
+    setCredentials(creds);
+    // Включаем флаг
+    setIsAuthenticated(true);
   };
 
   const handleSendMessage = async (text) => {
-    if (!text.trim()) return;
-    try {
-      const creds = userCredentials;
-      await sendMessage(creds.instanceId, creds.token, phoneNumber, text);
+    if (!text.trim() || !phoneNumber || !credentials) return;
 
-      setMessages((prev) => [
-        ...prev,
-        { sender: "me", text, timestamp: Date.now() },
-      ]);
+    setIsSending(true);
+    try {
+      await sendWhatsappMessage(
+        credentials.instanceId,
+        credentials.token,
+        phoneNumber,
+        text,
+      );
+      const newMessage = { sender: "me", text, timestamp: Date.now() };
+      setMessages((prev) => [...prev, newMessage]);
       setInputValue("");
     } catch (err) {
-      console.error(err.response?.data || err.message);
-      alert("Ошибка при отправке");
+      console.error("Ошибка отправки:", err);
+      alert(err.message || "Не удалось отправить сообщение.");
+    } finally {
+      setIsSending(false);
     }
   };
+
 
   return (
     <div className={style.chatApp}>
       <header className={style.header}>
+        <h1 className={style.mainTitle}>Чат с WhatsApp</h1>
         <h2 className={style.title}>
-          {userCredentials ? "📱 Чат" : "🔑 Авторизация"}
+          {!isAuthenticated && "🔑 Авторизация"}
+          {isAuthenticated && !phoneNumber && "📱 Создаем Чат"}
+          {isAuthenticated && phoneNumber && ""}
         </h2>
-        <a
-          href="https://green-api.com/max"
-          target="_blank"
-          rel="noreferrer"
-          className={style.apiLink}
-        >
-          Документация API
-        </a>
       </header>
-      {!userCredentials && <AuthForm onSubmit={handleAuthSubmit} />}
-      {userCredentials && !phoneNumber && (
+
+      {/* БЛОК 1: Авторизация */}
+      {!isAuthenticated && <AuthForm onLogin={handleAuthSuccess} />}
+
+      {/* БЛОК 2: Ввод номера */}
+      {isAuthenticated && !phoneNumber && (
         <OpenChat
-          setPhoneNumber={setPhoneNumber}
-          onCancel={() => setUserCredentials(null)}
+          setPhoneNumber={(num) => {
+            setPhoneNumber(num);
+          }}
         />
       )}
-      {userCredentials && phoneNumber && (
+
+      {/* БЛОК 3: Чат */}
+      {isAuthenticated && phoneNumber && (
         <>
           <SendMessageForm
-            inputValue={inputValue}
+            value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
-            onSubmit={(text) => handleSendMessage(text)}
+            onSubmit={handleSendMessage}
+            disabled={isSending}
           />
           <MessageList messages={messages} />
         </>

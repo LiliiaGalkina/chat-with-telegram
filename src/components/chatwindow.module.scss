@@ -11,9 +11,13 @@
     box-shadow: 0 0 1rem $link-color;
 }
 
-.title {
+.mainTitle {
     @include title(5rem);
     margin-bottom: 3rem;
+}
+
+.title {
+    @include title(3rem);
 }
 
 .apiLink {
