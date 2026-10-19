@@ -1,16 +1,9 @@
 @use "../../variables" as *;
 
 .authBlock {
-    width: 50%;
-    padding: 3rem 1rem;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border: 0.1rem solid $title-color;
-    border-radius: 1rem;
-    box-shadow: 0 0 1rem $link-color;
+ @include sectionBlock;
 }
+
 .subtitle {
     @include title(3.2rem, $link-color);
     margin-bottom: 3rem;

@@ -8,9 +8,10 @@
   gap: 2rem;
 }
 
+.label {
+	min-width: 13rem;
+}
+
 .input {
-  width: 50%;
-  padding: 1rem;
-  font-size: 2rem;
-  border-radius: 0.5rem;
+@include input;
 }

@@ -1,29 +1,37 @@
 import InputField from "../InputField/InputField";
+import {useState } from "react";
 import style from "./authform.module.scss";
 
-const AuthForm = ({
-  apiInstance,
-  onChangeApiInstance,
-  apiToken,
-  onChangeApiToken,
-}) => {
+const AuthForm = ({ onSubmit }) => {
+  const [instanceId, setInstanceId] = useState("");
+  const [token, setToken] = useState("");
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!instanceId || !token) return;
+    await onSubmit(instanceId, token);
+  };
+
   return (
     <section className={style.authBlock}>
-      <h3 className={style.subtitle}>Авторизация</h3>
-      <form action="#" className={style.authForm}>
+      <h3 className={style.subtitle}>Введите данные для авторизации</h3>
+      <form onSubmit={handleSubmit} className={style.authForm}>
         <InputField
           label="API Instance"
-          value={apiInstance}
-          onChange={onChangeApiInstance}
+          onChange={(v) => setInstanceId(v)}
+          placeholder="Введите ваш Instance ID"
         />
         <InputField
           label="API Token"
           type="password"
           autoComplete="off"
-          value={apiToken}
-          onChange={onChangeApiToken}
+          onChange={(v) => setToken(v)}
+          placeholder="Введите ваш Token"
         />
-        <button type="submit" className={style.authButton}>Авторизоваться</button>
+        <button type="submit" className={style.authButton}>
+          Авторизоваться
+        </button>
       </form>
     </section>
   );
