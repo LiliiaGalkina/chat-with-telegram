@@ -1,16 +1,6 @@
 @use "../../variables" as *;
 
-.inputBlock {
-   font-size: 2rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 2rem;
-}
 
-.label {
-	min-width: 13rem;
-}
 
 .input {
 @include input;

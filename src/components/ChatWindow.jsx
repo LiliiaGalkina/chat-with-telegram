@@ -70,7 +70,7 @@ const ChatWindow = () => {
 
       {/* БЛОК 3: Чат */}
       {isAuthenticated && phoneNumber && (
-        <>
+        <div className={style.chatContent}>
           <SendMessageForm
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
@@ -78,7 +78,7 @@ const ChatWindow = () => {
             disabled={isSending}
           />
           <MessageList messages={messages} />
-        </>
+        </div>
       )}
     </div>
   );

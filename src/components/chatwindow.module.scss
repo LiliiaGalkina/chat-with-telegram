@@ -30,3 +30,7 @@
         text-decoration: underline;
     }
 }
+
+.chatContent {
+    @include sectionBlock;
+}

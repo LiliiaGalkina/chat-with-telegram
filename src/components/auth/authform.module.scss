@@ -16,6 +16,18 @@
     font-size: 2rem;
 }
 
+.inputBlock {
+   font-size: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
+
+.label {
+	min-width: 13rem;
+}
+
 .authButton {
     @include button(30rem);
 }

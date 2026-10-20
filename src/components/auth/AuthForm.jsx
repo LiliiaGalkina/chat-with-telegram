@@ -21,23 +21,38 @@ const AuthForm = ({ onLogin }) => {
     }
   };
 
+  const handleChangeId = (e) => {
+    setInstanceId(e.target.value);
+  }
+
+  const handleChangeToken = (e) => {
+    setToken(e.target.value);
+  }
+
   return (
     <section className={style.authBlock}>
       <h3 className={style.subtitle}>Введите данные для авторизации</h3>
       {error && <div className={style.error}>{error}</div>}
 
       <form onSubmit={handleSubmit} className={style.authForm}>
-        <InputField
-          label="API Instance"
-          value={instanceId}
-          onChange={(v) => setInstanceId(v)}
-        />
-        <InputField
-          label="API Token"
-          type="password"
-          value={token}
-          onChange={(v) => setToken(v)}
-        />
+        <label className={style.inputBlock}>
+          <span className={style.label}>InstanceId</span>
+          <InputField
+            type="text"
+            value={instanceId}
+            onChange={handleChangeId}
+            placeholder="Введите свой instance ID"
+          />
+        </label>
+        <label className={style.inputBlock}>
+          <span className={style.label}>Token</span>
+          <InputField
+            type="password"
+            value={token}
+            onChange={handleChangeToken}
+            placeholder="Введите свой token"
+          />
+        </label>
         <button type="submit" className={style.authButton}>
           Авторизоваться
         </button>

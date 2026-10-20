@@ -1,31 +1,45 @@
 @use "../../variables" as *;
+
 //OpenChat
 
 .openChat {
-	@include sectionBlock;
+  @include sectionBlock;
 }
 
 .title {
-	@include title;
-	 margin-bottom: 3rem;
+  @include title;
+  margin-bottom: 3rem;
 }
 
 .text {
-	margin-bottom: 2rem;
-	font-size: 1.8rem;
-	font-weight: 500;
-}
-
-.input {
-	@include input;
-	margin-bottom: 2rem;
+  margin-bottom: 2rem;
+  font-size: 1.8rem;
+  font-weight: 500;
 }
 
 .error {
-	color: red;
-	margin-bottom: 1rem;
+  color: red;
+  margin-bottom: 1rem;
 }
 
 .button {
-	@include button(20rem);
+  @include button(20rem);
+  margin-top: 2rem;
+}
+
+//sendMessage
+
+.messageForm {
+  margin-bottom: 4rem;
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  span {
+    font-size: 2rem;
+    font-weight: 500;
+    color: $link-color;
+  }
 }

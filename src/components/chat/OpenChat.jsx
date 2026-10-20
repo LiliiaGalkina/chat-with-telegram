@@ -17,6 +17,10 @@ const OpenChat = ({ setPhoneNumber }) => {
     setInputValue("");
   };
 
+  const handleChangePhone = (e) => {
+    setInputValue(e.target.value);
+  }
+
   return (
     <div className={style.openChat}>
       <h3 className={style.title}>Укажите номер собеседника</h3>
@@ -25,16 +29,7 @@ const OpenChat = ({ setPhoneNumber }) => {
       </p>
 
       <form onSubmit={handleCreateChat}>
-        <input
-          id="phone"
-          type="text"
-          placeholder="Номер телефона"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          required
-          autoFocus
-          className={style.input}
-        />
+        <InputField type="text" value={inputValue} onChange={handleChangePhone} placeholder="Номер телефона" />
         <button type="submit" className={style.button}>
           Создать чат
         </button>

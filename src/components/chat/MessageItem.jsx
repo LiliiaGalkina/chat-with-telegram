@@ -1,7 +1,7 @@
 import style from "./chat.module.scss";
 
 const NessageItem = () => {
-    return ( <>чат</> );
+    return ( <></>);
 }
  
 export default NessageItem;
