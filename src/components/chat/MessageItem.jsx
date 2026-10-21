@@ -1,7 +1,14 @@
 import style from "./chat.module.scss";
 
-const NessageItem = () => {
-    return ( <></>);
-}
- 
-export default NessageItem;
+const MessageItem = ({ msg }) => {
+  const isMine = msg.sender === "me";
+
+  return (
+    <div className={`${style.message} ${isMine ? style.myMsg : style.peerMsg}`}>
+      <span>{msg.text}</span>
+      {/* Тут можно добавить аватар или имя */}
+    </div>
+  );
+};
+
+export default MessageItem;

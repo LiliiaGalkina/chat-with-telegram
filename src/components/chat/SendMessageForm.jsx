@@ -3,7 +3,13 @@ import style from "./chat.module.scss";
 
 const SendMessageForm = ({ value, onChange, onSubmit, disabled }) => {
   return (
-    <form onSubmit={onSubmit} className={style.messageForm}>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        onSubmit(value);
+      }}
+      className={style.messageForm}
+    >
       <label className={style.label}>
         <span>Введите сообщение:</span>
         <InputField

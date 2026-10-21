@@ -44,6 +44,31 @@ const ChatWindow = () => {
     }
   };
 
+//загрузка истории сообщений
+
+const loadChatHistory = async () => {
+  if (!credentials || !phoneNumber) return;
+
+  const chatId = `${phoneNumber}@c.us`;
+  try {
+    const messagesData = await getWhatsappMessages(
+      credentials.instanceId,
+      credentials.token,
+      chatId,
+    );
+
+    // Преобразуем данные к нужному формату
+    const formattedMsgs = messagesData.map((msg) => ({
+      sender: msg.chatId === phoneNumber ? "peer" : "me",
+      text: msg.messageData.textMessageData?.text ?? "",
+      timestamp: Date.parse(msg.timestamp),
+    }));
+
+    setMessages(formattedMsgs); // Загружаем историю
+  } catch (err) {
+    alert("Ошибка при загрузке истории: " + err.message);
+  }
+};
 
   return (
     <div className={style.chatApp}>
@@ -64,6 +89,7 @@ const ChatWindow = () => {
         <OpenChat
           setPhoneNumber={(num) => {
             setPhoneNumber(num);
+            loadChatHistory();
           }}
         />
       )}

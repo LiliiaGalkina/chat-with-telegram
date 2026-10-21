@@ -2,6 +2,8 @@ import axios from "axios";
 
 const API_DOMAIN = "https://api.green-api.com";
 
+//авторизация
+
 export const checkInstanceState = async (id, token) => {
   if (!/^\d+$/.test(id)) {
     return {
@@ -35,41 +37,83 @@ export const checkInstanceState = async (id, token) => {
   }
 };
 
+//отправка сообщения
 
-export const sendWhatsappMessage = async (id, token, phoneNumber, text) => {
-    // Проверка на пустые значения, чтобы не слать мусор в API
-    if (!id || !token || !phoneNumber || !text) {
-        throw new Error("Не хватает данных для отправки сообщения");
-    }
+export const sendWhatsappMessage = async (
+  instanceId,
+  token,
+  phoneNumber,
+  text,
+) => {
+  // Проверка валидности номера
+  if (!/^\d{10,15}$/.test(phoneNumber)) {
+    throw new Error("Неверный формат номера");
+  }
 
-    try {
-        // Документация Green API: 
-        // POST /waInstance{ID}/sendMessage/{token}
-        const response = await axios.post(
-            `${API_DOMAIN}/waInstance${id}/sendMessage/${token}`,
-            {
-                // ВАЖНО: Для WhatsApp Green API требует формат с @c.us
-                chatId: `${phoneNumber}@c.us`, 
-                message: text,
-            }
-        );
+  try {
+    // Форматируем номер как chatId
+    const chatId = `${phoneNumber}@c.us`;
 
-        // Green API возвращает статус 200 и объект с idMessage
-        if (response.status === 200) {
-            return { 
-                success: true, 
-                data: response.data 
-            };
-        }
+    // Делаем запрос к API
+    const response = await axios.post(
+      `${API_DOMAIN}/waInstance${instanceId}/sendMessage/${token}`,
+      { chatId, message: text },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
 
-        throw new Error(`Ошибка API: ${response.statusText}`);
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Ошибка при отправке:",
+      error.response?.data || error.message,
+    );
+    throw new Error(
+      error.response?.data.errors[0] || "Не удалось отправить сообщение.",
+    );
+  }
+};
 
-    } catch (error) {
-        // Если сервер вернул ошибку (например, неверный формат номера)
-        if (error.response) {
-            throw new Error(`Ошибка отправки: ${error.response.data.errors || error.response.statusText}`);
-        }
-        // Если нет интернета
-        throw new Error("Сервер недоступен. Проверьте интернет.");
-    }
+//получение сообщения
+
+export const getWhatsappMessages = async (
+  instanceId,
+  token,
+  chatId, // Это номер собеседника + @c.us
+) => {
+  try {
+    const response = await axios.get(
+      `${API_DOMAIN}/waInstance${instanceId}/receive/ReceiveChat/${token}`,
+      { params: { chatId } },
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Ошибка при получении сообщений:", error);
+    throw new Error(
+      error.response?.data.errors[0] || "Не удалось загрузить историю.",
+    );
+  }
+};
+
+//загрузить историю переписки
+export const getChatHistory = async (instanceId, token, chatId) => {
+  try {
+    const response = await axios.get(
+      `${API_DOMAIN}/waInstance${instanceId}/receive/ReceiveChat/${token}`,
+      { params: { chatId } },
+    );
+    return response.data.map((msg) => ({
+      sender: msg.chatId === chatId ? "peer" : "me",
+      text: msg.messageData.textMessageData?.text ?? "",
+      timestamp: Date.parse(msg.timestamp),
+    }));
+  } catch (error) {
+    console.error("Ошибка при получении истории:", error);
+    throw new Error(
+      error.response?.data.errors[0] || "Не удалось получить сообщения.",
+    );
+  }
 };
