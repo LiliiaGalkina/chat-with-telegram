@@ -70,10 +70,36 @@ const loadChatHistory = async () => {
   }
 };
 
+//выход из чата
+const handleCloseChat = () => {
+  // Сбрасываем номер собеседника
+  setPhoneNumber(null);
+  // Чистим историю переписки
+  setMessages([]);
+};
+
+//выход из приложения
+const handleLogout = () => {
+  setCredentials(null); // Токены и ID инстанса
+  setPhoneNumber(null); // Номер собеседника
+  setMessages([]); // История переписки
+  setIsAuthenticated(false);
+};
+
   return (
     <div className={style.chatApp}>
       <header className={style.header}>
         <h1 className={style.mainTitle}>Чат с WhatsApp</h1>
+        {phoneNumber && (
+          <button onClick={handleCloseChat} className={style.closeChatBtn}>
+            Закрыть чат
+          </button>
+        )}
+        {!phoneNumber && isAuthenticated && (
+          <button onClick={handleLogout} className={style.logoutBtn}>
+            Выйти из приложения
+            </button>
+        )}
         <h2 className={style.title}>
           {!isAuthenticated && "🔑 Авторизация"}
           {isAuthenticated && !phoneNumber && "📱 Создаем Чат"}

@@ -1,6 +1,7 @@
 @use "../variables" as *;
 
 .chatApp {
+    position: relative;
     width: 90%;
     height: 90%;
     padding: 3rem 2rem;
@@ -33,4 +34,19 @@
 
 .chatContent {
     @include sectionBlock;
+}
+
+.logoutBtn,
+.closeChatBtn {
+    position: absolute;
+    top: 3rem;
+    right: 2rem;
+}
+
+.closeChatBtn {
+     @include button(15rem);
+}
+
+.logoutBtn {
+    @include button(22rem)
 }

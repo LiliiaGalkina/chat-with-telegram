@@ -15,8 +15,9 @@ $link-color: #0e4e86;
 
 @mixin button($width) {
   margin: 0 auto;
-  width: $width;
+  min-width: $width;
   height: 5rem;
+  padding: 0.5rem 1rem;
   font-size: 2rem;
   border-radius: 0.5rem;
   background-color: $link-color;
